@@ -1,3 +1,3 @@
 # Sign Language Transformers (CVPR'20)
 
-coming soon...
+In preparation and will be released with CVPR'20.
