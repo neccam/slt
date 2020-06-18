@@ -1,0 +1,116 @@
+name: sign_experiment
+data:
+    version: phoenix_2014_trans
+    sgn: sign
+    txt: text
+    gls: gloss
+    train: PHOENIX2014T/phoenix14t.pami0.train
+    dev: PHOENIX2014T/phoenix14t.pami0.dev
+    test: PHOENIX2014T/phoenix14t.pami0.test
+    feature_size: 1024
+    level: word
+    txt_lowercase: true
+    max_sent_length: 400
+    random_train_subset: -1
+    random_dev_subset: -1
+testing:
+    recognition_beam_sizes:
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    - 6
+    - 7
+    - 8
+    - 9
+    - 10
+    translation_beam_sizes:
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    - 6
+    - 7
+    - 8
+    - 9
+    - 10
+    translation_beam_alphas:
+    - -1
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+training:
+    reset_best_ckpt: false
+    reset_scheduler: false
+    reset_optimizer: false
+    random_seed: 42
+    model_dir: "./sign_sample_model"
+    recognition_loss_weight: 1.0
+    translation_loss_weight: 1.0
+    eval_metric: bleu
+    optimizer: adam
+    learning_rate: 0.001
+    batch_size: 32
+    num_valid_log: 5
+    epochs: 5000000
+    early_stopping_metric: eval_metric
+    batch_type: sentence
+    translation_normalization: batch
+    eval_recognition_beam_size: 1
+    eval_translation_beam_size: 1
+    eval_translation_beam_alpha: -1
+    overwrite: true
+    shuffle: true
+    use_cuda: true
+    translation_max_output_length: 30
+    keep_last_ckpts: 1
+    batch_multiplier: 1
+    logging_freq: 100
+    validation_freq: 100
+    betas:
+    - 0.9
+    - 0.998
+    scheduling: plateau
+    learning_rate_min: 1.0e-07
+    weight_decay: 0.001
+    patience: 8
+    decrease_factor: 0.7
+    label_smoothing: 0.0
+model:
+    initializer: xavier
+    bias_initializer: zeros
+    init_gain: 1.0
+    embed_initializer: xavier
+    embed_init_gain: 1.0
+    tied_softmax: false
+    encoder:
+        type: transformer
+        num_layers: 3
+        num_heads: 8
+        embeddings:
+            embedding_dim: 512
+            scale: false
+            dropout: 0.1
+            norm_type: batch
+            activation_type: softsign
+        hidden_size: 512
+        ff_size: 2048
+        dropout: 0.1
+    decoder:
+        type: transformer
+        num_layers: 3
+        num_heads: 8
+        embeddings:
+            embedding_dim: 512
+            scale: false
+            dropout: 0.1
+            norm_type: batch
+            activation_type: softsign
+        hidden_size: 512
+        ff_size: 2048
+        dropout: 0.1
