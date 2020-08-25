@@ -1,6 +1,6 @@
 # Sign Language Transformers (CVPR'20)
 
-This repo contains the training and evaluation code for the paper [Sign Language Transformers: Sign Language Transformers: Joint End-to-end Sign Language Recognition and Translation](). 
+This repo contains the training and evaluation code for the paper [Sign Language Transformers: Sign Language Transformers: Joint End-to-end Sign Language Recognition and Translation](https://www.cihancamgoz.com/pub/camgoz2020cvpr.pdf). 
 
 This code is based on [Joey NMT](https://github.com/joeynmt/joeynmt) but modified to realize joint continuous sign language recognition and translation. For text-to-text translation experiments, you can use the original Joey NMT framework.
  
@@ -15,13 +15,13 @@ This code is based on [Joey NMT](https://github.com/joeynmt/joeynmt) but modifie
 
 ## Usage
 
-  `python -m joeynmt train configs/sign.yaml` 
+  `python -m signjoey train configs/sign.yaml` 
 
-! Note that the default data directory is `./data`. If you download them to somewhere, you need to update the `data_path` parameters in your config file.   
+! Note that the default data directory is `./data`. If you download them to somewhere else, you need to update the `data_path` parameters in your config file.   
 ## ToDo:
 
-- [X] *Initial code release - 18 June 2020.*
-- [ ] Release image features for Phoenix2014T.
+- [X] *Initial code release.*
+- [X] *Release image features for Phoenix2014T.*
 - [ ] Share extensive qualitative and quantitative results & config files to generate them.
 - [ ] (Nice to have) - Guide to set up conda environment and docker image.
 

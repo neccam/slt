@@ -1,3 +1,4 @@
 #!/usr/bin/env bash
-# TODO (Cihan): Need to find a place to upload large files.
-wget "link_to_the_data"
+wget "http://cihancamgoz.com/files/cvpr2020/phoenix14t.pami0.train"
+wget "http://cihancamgoz.com/files/cvpr2020/phoenix14t.pami0.dev"
+wget "http://cihancamgoz.com/files/cvpr2020/phoenix14t.pami0.test"
