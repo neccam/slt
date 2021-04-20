@@ -38,7 +38,7 @@ plotly==4.5.0
 pluggy==0.13.1
 portalocker==1.5.2
 protobuf==3.11.2
-py==1.8.1
+py==1.10.0
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
 pycosat==0.6.3
