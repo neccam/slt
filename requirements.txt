@@ -27,7 +27,7 @@ Markdown==3.1.1
 matplotlib==3.1.2
 more-itertools==8.2.0
 natsort==7.0.1
-numpy==1.18.1
+numpy==1.22.0
 oauthlib==3.1.0
 opencv-python==4.2.0.32
 opt-einsum==3.1.0
