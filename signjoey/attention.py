@@ -59,8 +59,10 @@ class BahdanauAttention(AttentionMechanism):
         """
         self._check_input_shapes_forward(query=query, mask=mask, values=values)
 
-        assert mask is not None, "mask is required"
-        assert self.proj_keys is not None, "projection keys have to get pre-computed"
+        if mask is None:
+            raise ValueError("mask is required")
+        if self.proj_keys is None:
+            raise ValueError("projection keys have to get pre-computed")
 
         # We first project the query (the decoder state).
         # The projected keys (the encoder states) were already pre-computated.
@@ -117,11 +119,16 @@ class BahdanauAttention(AttentionMechanism):
         :param values:
         :return:
         """
-        assert query.shape[0] == values.shape[0] == mask.shape[0]
-        assert query.shape[1] == 1 == mask.shape[1]
-        assert query.shape[2] == self.query_layer.in_features
-        assert values.shape[2] == self.key_layer.in_features
-        assert mask.shape[2] == values.shape[1]
+        if query.shape[0] != values.shape[0] != mask.shape[0]:
+            raise ValueError("Invalid input shape for query, mask, and values")
+        if query.shape[1] != 1 or mask.shape[1] != 1:
+            raise ValueError("Invalid input shape for query and mask")
+        if query.shape[2] != self.query_layer.in_features:
+            raise ValueError("Invalid number of features in query")
+        if values.shape[2] != self.key_layer.in_features:
+            raise ValueError("Invalid number of features in values")
+        if mask.shape[2] != values.shape[1]:
+            raise ValueError("Inconsistent key size with mask")
 
     def __repr__(self):
         return "BahdanauAttention"
@@ -172,8 +179,10 @@ class LuongAttention(AttentionMechanism):
         """
         self._check_input_shapes_forward(query=query, mask=mask, values=values)
 
-        assert self.proj_keys is not None, "projection keys have to get pre-computed"
-        assert mask is not None, "mask is required"
+        if self.proj_keys is None:
+            raise ValueError("projection keys have to get pre-computed")
+        if mask is None:
+            raise ValueError("mask is required")
 
         # scores: batch_size x 1 x sgn_length
         scores = query @ self.proj_keys.transpose(1, 2)
@@ -203,20 +212,20 @@ class LuongAttention(AttentionMechanism):
     def _check_input_shapes_forward(
         self, query: torch.Tensor, mask: torch.Tensor, values: torch.Tensor
     ):
-        """
-        Make sure that inputs to `self.forward` are of correct shape.
-        Same input semantics as for `self.forward`.
-
-        :param query:
-        :param mask:
-        :param values:
-        :return:
-        """
-        assert query.shape[0] == values.shape[0] == mask.shape[0]
-        assert query.shape[1] == 1 == mask.shape[1]
-        assert query.shape[2] == self.key_layer.out_features
-        assert values.shape[2] == self.key_layer.in_features
-        assert mask.shape[2] == values.shape[1]
+        if not query.shape[0] == values.shape[0] == mask.shape[0]:
+            raise ValueError("Shapes mismatch for inputs")
+        
+        if not query.shape[1] == 1 == mask.shape[1]:
+            raise ValueError("Shapes mismatch for inputs")
+        
+        if not query.shape[2] == self.key_layer.out_features:
+            raise ValueError("Shapes mismatch for query and key_layer.out_features")
+        
+        if not values.shape[2] == self.key_layer.in_features:
+            raise ValueError("Shapes mismatch for values and key_layer.in_features")
+        
+        if not mask.shape[2] == values.shape[1]:
+            raise ValueError("Shapes mismatch for mask and values")
 
     def __repr__(self):
         return "LuongAttention"

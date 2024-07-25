@@ -157,26 +157,48 @@ class RecurrentDecoder(Decoder):
         """
         Make sure the input shapes to `self._forward_step` are correct.
         Same inputs as `self._forward_step`.
-
+    
         :param prev_embed:
         :param prev_att_vector:
         :param encoder_output:
         :param src_mask:
         :param hidden:
         """
-        assert prev_embed.shape[1:] == torch.Size([1, self.emb_size])
-        assert prev_att_vector.shape[1:] == torch.Size([1, self.hidden_size])
-        assert prev_att_vector.shape[0] == prev_embed.shape[0]
-        assert encoder_output.shape[0] == prev_embed.shape[0]
-        assert len(encoder_output.shape) == 3
-        assert src_mask.shape[0] == prev_embed.shape[0]
-        assert src_mask.shape[1] == 1
-        assert src_mask.shape[2] == encoder_output.shape[1]
+        if prev_embed.shape[1:] != torch.Size([1, self.emb_size]):
+            raise ValueError("Invalid shape for prev_embed")
+        
+        if prev_att_vector.shape[1:] != torch.Size([1, self.hidden_size]):
+            raise ValueError("Invalid shape for prev_att_vector")
+        
+        if prev_att_vector.shape[0] != prev_embed.shape[0]:
+            raise ValueError("Shapes of prev_att_vector and prev_embed do not match")
+        
+        if encoder_output.shape[0] != prev_embed.shape[0]:
+            raise ValueError("Shapes of encoder_output and prev_embed do not match")
+        
+        if len(encoder_output.shape) != 3:
+            raise ValueError("Invalid shape for encoder_output")
+        
+        if src_mask.shape[0] != prev_embed.shape[0]:
+            raise ValueError("Shapes of src_mask and prev_embed do not match")
+        
+        if src_mask.shape[1] != 1:
+            raise ValueError("Invalid shape for src_mask")
+        
+        if src_mask.shape[2] != encoder_output.shape[1]:
+            raise ValueError("Shapes of src_mask and encoder_output do not match")
+        
         if isinstance(hidden, tuple):  # for lstm
             hidden = hidden[0]
-        assert hidden.shape[0] == self.num_layers
-        assert hidden.shape[1] == prev_embed.shape[0]
-        assert hidden.shape[2] == self.hidden_size
+        
+        if hidden.shape[0] != self.num_layers:
+            raise ValueError("Invalid shape for hidden")
+        
+        if hidden.shape[1] != prev_embed.shape[0]:
+            raise ValueError("Shapes of hidden and prev_embed do not match")
+        
+        if hidden.shape[2] != self.hidden_size:
+            raise ValueError("Invalid shape for hidden")
 
     def _check_shapes_input_forward(
         self,
